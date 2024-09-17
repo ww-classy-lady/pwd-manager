@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5ce83daa-ae1d-498a-99f4-2a461bc93f49" name="Changes" comment="" />
+    <list default="true" id="7524a8b6-558b-436e-93b0-15a83a81a2fa" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -10,17 +10,18 @@
   <component name="ProjectColorInfo"><![CDATA[{
   "associatedIndex": 8
 }]]></component>
-  <component name="ProjectId" id="2lz34MB0OUBkY2r8ksXKWOH9dDy" />
+  <component name="ProjectId" id="2mD1VD5zdZRAbBkgGN5LrKPGtSi" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.Main.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "kotlin-language-version-configured": "true",
     "nodejs_package_manager_path": "npm",
-    "onboarding.tips.debug.path": "C:/Users/wendy/IdeaProjects/pwd-manager/src/Main.java",
+    "onboarding.tips.debug.path": "C:/Users/wendy/IdeaProjects/pwd-manager/java proj/src/Main.java",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -35,12 +36,12 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="5ce83daa-ae1d-498a-99f4-2a461bc93f49" name="Changes" comment="" />
-      <created>1726168887554</created>
+      <changelist id="7524a8b6-558b-436e-93b0-15a83a81a2fa" name="Changes" comment="" />
+      <created>1726596357493</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1726168887554</updated>
-      <workItem from="1726168888431" duration="59000" />
+      <updated>1726596357493</updated>
+      <workItem from="1726596358663" duration="60000" />
     </task>
     <servers />
   </component>
