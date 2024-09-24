@@ -1,15 +1,47 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import java.util.Scanner;
+
+//TODO:
+//1. Set up file to store salt: ..., label: passcode...etc
+//Find a way to implement the functionalities detailed in the assignment page (the structure, interactive layout is done)
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
-
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+        //Main menu
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the passcode to access your passwords: ");
+        String passphrase = scanner.nextLine();
+        String filePass = "pass"; //TODO: must change this to the password form for the file
+        //QUESTION FOR Office HOUR: file exist if passcode is correct & exist right?
+        //file does not exist if the existing password variable is empty/null?
+        if(passphrase.equals(filePass)) {
+            System.out.println("File exist");
+        }
+        else{
+            System.out.println("No password file detected. Creating a new password file.");
+        }
+        while(true) {
+            System.out.println("a: Add Password");
+            System.out.println("r: Read Password");
+            System.out.println("q. Quit");
+            System.out.print("Enter choice: ");
+            String choice = scanner.nextLine();
+            switch(choice) {
+                case "a":
+                    System.out.print("Enter label for password: ");
+                    String label = scanner.nextLine();
+                    System.out.print("Enter password to store: ");
+                    String password = scanner.nextLine();
+                    break;
+                case "r":
+                    System.out.print("Enter label for password: ");
+                    String label2 = scanner.nextLine();
+                    //TODO: finding passcode from file based on provided label
+                    // if label does not exist, return not found or some error
+                    System.out.println("Found: //TODO! ");
+                    break;
+                case "q":
+                    System.out.println("Quitting");
+                    System.exit(0);
+            }
         }
     }
 }
