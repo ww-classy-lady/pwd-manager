@@ -13,10 +13,26 @@ import java.util.Scanner;
 
 
 //TODO:
-//1. Set up file to store salt: ..., label: passcode...etc
-//Find a way to implement the functionalities detailed in the assignment page (the structure, interactive layout is done)
+/*
+ * 1. Store a hard coded token
+ * (we do not ask user if file exist or not, we check that)
+ * 2. If file does not exist,
+ * a) create the file,
+ * b) ask user for passphrase to file
+ * c) create a new salt
+ * d) store salt: encrypted token pair (token encrypted using key [generated using user's passphrase and salt]))
+ * 3. If file does exist, using salt stored in file(byte[]) and user's entered passphrase to generate a key (secretkeyspec)
+ * Use that key to decrypt the encrypted token (stored in the file) and see if that value equals string token (private var)
+ * a) If decrypted token == string token, then allow user to add, read, or quit.
+ * b) Else, throw an error or exception for wrong passphrase
+ */
 public class Main {
-    private static SecretKeySpec create_key(String new_passphrase, byte[] salt) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    private static String token = "wendy";
+
+    // String base64Encoded =  encrypt(key, plaintext)
+    // String decrypt(key, encryptedBase64EncodedText), returns clear text
+
+    private static SecretKeySpec createKey(String new_passphrase, byte[] salt) throws InvalidKeySpecException, NoSuchAlgorithmException {
         KeySpec spec = new PBEKeySpec(new_passphrase.toCharArray(), salt, 600000, 128);
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
         SecretKey sharedKey = factory.generateSecret(spec);
@@ -39,6 +55,7 @@ public class Main {
                 file.createNewFile();
                 System.out.println("File Created");
 
+
                 SecureRandom random = new SecureRandom();
                 byte[] salt = new byte[16];
                 random.nextBytes(salt);
@@ -48,7 +65,10 @@ public class Main {
                 System.out.print("Enter your new passphrase: ");
                 String new_passphrase = scanner.nextLine();
 
-                SecretKeySpec key = create_key(new_passphrase, salt);
+                SecretKeySpec key = createKey(new_passphrase, salt);
+
+                // Take the key, encrypt the token
+                // Store the salt and the token in the first line
 
             } catch (IOException e) {
                 throw new RuntimeException(e);
