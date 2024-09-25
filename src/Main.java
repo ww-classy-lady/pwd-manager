@@ -1,9 +1,10 @@
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
+import javax.crypto.*;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
@@ -27,10 +28,27 @@ import java.util.Scanner;
  * b) Else, throw an error or exception for wrong passphrase
  */
 public class Main {
-    private static String token = "wendy";
+    private static String token = "wendylauren";
 
     // String base64Encoded =  encrypt(key, plaintext)
     // String decrypt(key, encryptedBase64EncodedText), returns clear text
+
+    private static String encrypt(SecretKeySpec key, String plaintext) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        Cipher cipher = Cipher.getInstance("AES");
+        cipher.init(Cipher.ENCRYPT_MODE, key);
+
+        byte[] encryptedData = cipher.doFinal(plaintext.getBytes());
+        return new String(Base64.getEncoder().encode(encryptedData));
+    }
+
+    private static String decrypt(SecretKeySpec key, String encryptedBase64EncodedText) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        Cipher cipher = Cipher.getInstance("AES");
+        cipher.init(Cipher.DECRYPT_MODE, key);
+
+        byte[] decoded = Base64.getDecoder().decode(encryptedBase64EncodedText);
+        byte[] decrypted = cipher.doFinal(decoded);
+        return new String(decrypted);
+    }
 
     private static SecretKeySpec createKey(String new_passphrase, byte[] salt) throws InvalidKeySpecException, NoSuchAlgorithmException {
         KeySpec spec = new PBEKeySpec(new_passphrase.toCharArray(), salt, 600000, 128);
@@ -40,7 +58,13 @@ public class Main {
         SecretKeySpec key = new SecretKeySpec(encoded_key, "AES");
         return key;
     }
-    public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException {
+
+    private static void writeToFile(File file, String left, String right) throws IOException {
+        FileWriter fr = new FileWriter(file, true);
+        fr.write(left + ":" + right);
+        fr.close();
+    }
+    public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
         //Main menu
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter the passcode to access your passwords: ");
@@ -55,17 +79,19 @@ public class Main {
                 file.createNewFile();
                 System.out.println("File Created");
 
-
                 SecureRandom random = new SecureRandom();
                 byte[] salt = new byte[16];
                 random.nextBytes(salt);
-
-                String encoded_salt = Base64.getEncoder().encodeToString(salt);
+                String encodedSalt = Base64.getEncoder().encodeToString(salt);
 
                 System.out.print("Enter your new passphrase: ");
                 String new_passphrase = scanner.nextLine();
 
                 SecretKeySpec key = createKey(new_passphrase, salt);
+                String encryptedToken = encrypt(key, token);
+
+                writeToFile(file, encodedSalt, encryptedToken);
+
 
                 // Take the key, encrypt the token
                 // Store the salt and the token in the first line
