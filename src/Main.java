@@ -1,9 +1,7 @@
 import javax.crypto.*;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -64,7 +62,9 @@ public class Main {
         fr.write(left + ":" + right);
         fr.close();
     }
-    public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
+
+    // private static String readLine(file, )
+    public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, IOException {
         //Main menu
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter the passcode to access your passwords: ");
@@ -73,6 +73,48 @@ public class Main {
 
         if (file.exists()) {
             System.out.println("File exists");
+            // extract salt
+            // make new key
+            // use key to decrypt token
+            // check if token is same
+            BufferedReader br = new BufferedReader(new FileReader("src/passwords.txt"));
+            String firstLine = br.readLine();
+            String encodedSalt = firstLine.substring(0, firstLine.indexOf(":"));
+            byte[] salt = Base64.getDecoder().decode(encodedSalt);
+            SecretKeySpec key = createKey(passphrase, salt);
+            String encodedToken = firstLine.substring(firstLine.indexOf(":")+1);
+            String decryptedToken = decrypt(key, encodedToken);
+
+            if (token.equals(decryptedToken)){
+                while(true) {
+                    System.out.println("a: Add Password");
+                    System.out.println("r: Read Password");
+                    System.out.println("q. Quit");
+                    System.out.print("Enter choice: ");
+                    String choice = scanner.nextLine();
+                    switch(choice) {
+                        case "a":
+                            System.out.print("Enter label for password: ");
+                            String label = scanner.nextLine();
+                            System.out.print("Enter password to store: ");
+                            String password = scanner.nextLine();
+                            break;
+                        case "r":
+                            System.out.print("Enter label for password: ");
+                            String label2 = scanner.nextLine();
+                            //TODO: finding passcode from file based on provided label
+                            // if label does not exist, return not found or some error
+                            System.out.println("Found: //TODO! ");
+                            break;
+                        case "q":
+                            System.out.println("Quitting");
+                            System.exit(0);
+                    }
+                }
+            } else {
+            }
+
+
         } else {
             System.out.println("No password file detected. Creating a new password file.");
             try {
@@ -98,32 +140,6 @@ public class Main {
 
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            }
-        }
-
-        while(true) {
-            System.out.println("a: Add Password");
-            System.out.println("r: Read Password");
-            System.out.println("q. Quit");
-            System.out.print("Enter choice: ");
-            String choice = scanner.nextLine();
-            switch(choice) {
-                case "a":
-                    System.out.print("Enter label for password: ");
-                    String label = scanner.nextLine();
-                    System.out.print("Enter password to store: ");
-                    String password = scanner.nextLine();
-                    break;
-                case "r":
-                    System.out.print("Enter label for password: ");
-                    String label2 = scanner.nextLine();
-                    //TODO: finding passcode from file based on provided label
-                    // if label does not exist, return not found or some error
-                    System.out.println("Found: //TODO! ");
-                    break;
-                case "q":
-                    System.out.println("Quitting");
-                    System.exit(0);
             }
         }
     }
