@@ -7,7 +7,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -49,10 +51,40 @@ public class Main {
     }
 
     private static void writeToFile(File file, String left, String right) throws IOException {
-        FileWriter fr = new FileWriter(file, true);
-        fr.write(left + ":" + right);
-        fr.write("\n");
-        fr.close();
+        BufferedReader reader = new BufferedReader(new FileReader("passwords.txt"));
+        List<String> allLinesInFile = new ArrayList<>();
+        String line = reader.readLine();
+        String pair = left + ":" + right;
+        boolean updated = false;
+        while(line != null) {
+            if (line.substring(0, line.indexOf(":")).equals(left)) {
+                String oldRight = line.substring(line.indexOf(":") + 1);
+                pair = line.replace(oldRight, right);
+                allLinesInFile.add(pair);
+                updated = true;
+            }
+            else{
+                allLinesInFile.add(line);
+            }
+            line = reader.readLine();
+        }
+        reader.close();
+        if (!updated) {
+            FileWriter writer = new FileWriter("passwords.txt", true);
+            writer.write(pair);
+            writer.write("\n");
+            writer.close();
+        }
+        else{
+            FileWriter writer = new FileWriter("passwords.txt");
+            StringBuilder fileContent = new StringBuilder();
+            for(String currentLine: allLinesInFile)
+            {
+                fileContent.append(currentLine).append("\n");
+            }
+            writer.write(fileContent.toString());
+            writer.close();
+        }
     }
     private static String readFromFile(File file, SecretKeySpec key, String label) throws IOException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         BufferedReader br = new BufferedReader(new FileReader("passwords.txt"));
