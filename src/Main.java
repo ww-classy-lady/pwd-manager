@@ -12,6 +12,9 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Scanner;
 
+//Group Members: Lauren Eterno, Wendy Wu
+//Assignment 1 Password Manager CSDS 444
+//Date: 9/26/2024
 public class Main {
     private static String token = "wendylauren";
 
