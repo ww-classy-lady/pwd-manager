@@ -163,8 +163,7 @@ public class Main {
                 case "r":
                     System.out.print("Enter label for password: ");
                     String label2 = scanner.nextLine();
-                    //TODO: finding passcode from file based on provided label
-                    // if label does not exist, return not found or some error
+
                     String decryptedPass = readFromFile(file, key, label2);
                     if(decryptedPass == null) {
                         System.out.println("Failed READ operation - Password not found with this label");
