@@ -10,26 +10,8 @@ import java.security.spec.KeySpec;
 import java.util.Base64;
 import java.util.Scanner;
 
-
-//TODO:
-/*
- * 1. Store a hard coded token
- * (we do not ask user if file exist or not, we check that)
- * 2. If file does not exist,
- * a) create the file,
- * b) ask user for passphrase to file
- * c) create a new salt
- * d) store salt: encrypted token pair (token encrypted using key [generated using user's passphrase and salt]))
- * 3. If file does exist, using salt stored in file(byte[]) and user's entered passphrase to generate a key (secretkeyspec)
- * Use that key to decrypt the encrypted token (stored in the file) and see if that value equals string token (private var)
- * a) If decrypted token == string token, then allow user to add, read, or quit.
- * b) Else, throw an error or exception for wrong passphrase
- */
 public class Main {
     private static String token = "wendylauren";
-
-    // String base64Encoded =  encrypt(key, plaintext)
-    // String decrypt(key, encryptedBase64EncodedText), returns clear text
 
     private static String encrypt(SecretKeySpec key, String plaintext) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
         try{
@@ -73,7 +55,7 @@ public class Main {
         fr.close();
     }
     private static String readFromFile(File file, SecretKeySpec key, String label) throws IOException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-        BufferedReader br = new BufferedReader(new FileReader("src/passwords.txt"));
+        BufferedReader br = new BufferedReader(new FileReader("passwords.txt"));
         String line = br.readLine();
         while(line != null) {
             if (line.substring(0, line.indexOf(":")).equals(label)) {
@@ -85,13 +67,13 @@ public class Main {
         br.close();
         return null;
     }
-    // private static String readLine(file, )
+
     public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, IOException {
         //Main menu
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter the passcode to access your passwords: ");
         String passphrase = scanner.nextLine();
-        File file = new File("src/passwords.txt");
+        File file = new File("passwords.txt");
         SecretKeySpec key;
 
         if (!file.exists()) {
@@ -108,8 +90,6 @@ public class Main {
 
                 writeToFile(file, encodedSalt, encryptedToken);
 
-                // Take the key, encrypt the token
-                // Store the salt and the token in the first line
 
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -117,7 +97,7 @@ public class Main {
         }
         else {
             //file exists now
-            BufferedReader br = new BufferedReader(new FileReader("src/passwords.txt"));
+            BufferedReader br = new BufferedReader(new FileReader("passwords.txt"));
             String firstLine = br.readLine();
             String encodedSalt = firstLine.substring(0, firstLine.indexOf(":"));
             byte[] salt = Base64.getDecoder().decode(encodedSalt);
@@ -130,7 +110,7 @@ public class Main {
                 System.exit(0);
             }
         }
-        //file does not exist but we created a new file
+        //file does not exist, but we created a new file
         //or file exists and token equals decrypted token
         while(true) {
             System.out.println("a: Add Password");
